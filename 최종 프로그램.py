@@ -6,14 +6,24 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 import datetime
 import clipboard
+import requests
+import json
 
 # 텔레그램 API 설정
-api_id = '27114820'          # 자신의 API ID로 교체
-api_hash = '2f7a1a88abf0f9e49dd1b598ca4bc3a3'      # 자신의 API Hash로 교체
-channel_id = int('-1002146009138')  # 모니터링할 채널의 고유 ID로 교체
+api_id = ''          # 자신의 API ID로 교체
+api_hash = ''      # 자신의 API Hash로 교체
+channel_id = int('')  # 모니터링할 채널의 고유 ID로 교체
+
+#텔레그램 봇이랑 알림 채널 설정
+bot_token = ''
+notification_channel_id = ''
+
+#url 설정
+url = f''
 
 # 투자 금액 정하기
 a = '20'
+
 # 텔레그램 클라이언트 초기화
 client = TelegramClient('session_name', api_id, api_hash)
 
@@ -189,10 +199,37 @@ async def process_message(message):
 
                     #거래가 체결되었는지 출력
                     if t==t1 and s==s1:
-                        print('거래가 체결되었습니다')
+                        trade_message1 = '회차:'+ iteration
+                        trade_message2 = '진입가:'+ entry
+                        trade_message3 = '목표가:'+ target
+                        trade_message4 = '손절가:'+ stop
+                        trade_message = f'''
+{trade_message1}
+{trade_message2}
+{trade_message3}
+{trade_message4}
+거래가 체결되었습니다'''
+                        data = {'chat_id': notification_channel_id, 'text': trade_message}
+                        res = requests.get(url, data=data)
+                        if res.status_code == 200:
+                            print(json.loads(res.text))
                         return
                         break
                     else:
+                        trade_message1 = '회차:'+ iteration
+                        trade_message2 = '진입가:'+ entry
+                        trade_message3 = '목표가:'+ target
+                        trade_message4 = '손절가:'+ stop
+                        trade_message = f'''
+{trade_message1}
+{trade_message2}
+{trade_message3}
+{trade_message4}
+거래가 미체결되었습니다. 다시 시도하겠습니다.'''
+                        data = {'chat_id': notification_channel_id, 'text': trade_message}
+                        res = requests.get(url, data=data)
+                        if res.status_code == 200:
+                            print(json.loads(res.text))
                         print('거래가 미체결되었습니다. 다시 시도하겠습니다.')
                     
                 elif position == 'Short':
@@ -248,10 +285,39 @@ async def process_message(message):
                     
                     #거래가 체결되었는지 출력
                     if t==t1 and s==s1:
+                        trade_message1 = '회차:'+ iteration
+                        trade_message2 = '진입가:'+ entry
+                        trade_message3 = '목표가:'+ target
+                        trade_message4 = '손절가:'+ stop
+                        trade_message = f'''
+{trade_message1}
+{trade_message2}
+{trade_message3}
+{trade_message4}
+거래가 체결되었습니다'''
+                        data = {'chat_id': notification_channel_id, 'text': trade_message}
+                        res = requests.get(url, data=data)
+                        if res.status_code == 200:
+                            print(json.loads(res.text))
                         print('거래가 체결되었습니다')
                         return
                         break
                     else:
+                         #거래가 체결되었는지 출력
+                        trade_message1 = '회차:'+ iteration
+                        trade_message2 = '진입가:'+ entry
+                        trade_message3 = '목표가:'+ target
+                        trade_message4 = '손절가:'+ stop
+                        trade_message = f'''
+{trade_message1}
+{trade_message2}
+{trade_message3}
+{trade_message4}
+거래가 미체결되었습니다. 다시 시도하겠습니다.'''
+                        data = {'chat_id': notification_channel_id, 'text': trade_message}
+                        res = requests.get(url, data=data)
+                        if res.status_code == 200:
+                            print(json.loads(res.text))
                         print('거래가 미체결되었습니다. 다시 시도하겠습니다.')
                 else:
                     print("알 수 없는 포지션입니다.")
