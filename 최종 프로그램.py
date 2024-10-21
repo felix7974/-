@@ -230,7 +230,9 @@ async def process_message(message):
 {trade_message2}
 {trade_message3}
 {trade_message4}
-거래가 미체결되었습니다. 다시 시도하겠습니다. 미체결되었으므로 확인 한번 해야 합니다'''
+거래가 미체결되었습니다.
+다시 시도하겠습니다.
+미체결되었으므로 확인 한번 해야 합니다'''
                         data = {'chat_id': notification_channel_id, 'text': trade_message}
                         res = requests.get(url, data=data)
                         if res.status_code == 200:
@@ -322,7 +324,9 @@ async def process_message(message):
 {trade_message2}
 {trade_message3}
 {trade_message4}
-거래가 미체결되었습니다. 다시 시도하겠습니다. 미체결되었으므로 확인 한번 해야 합니다'''
+거래가 미체결되었습니다.
+다시 시도하겠습니다.
+미체결되었으므로 확인 한번 해야 합니다'''
                         data = {'chat_id': notification_channel_id, 'text': trade_message}
                         res = requests.get(url, data=data)
                         if res.status_code == 200:
@@ -342,7 +346,12 @@ async def process_message(message):
 {trade_message1}
 {trade_message0}
 {trade_message2}
-해당 회차에서의 수익을 실현하였습니다! 축하합니다!'''
+해당 회차에서의 수익을 실현하였습니다!
+축하합니다!'''
+                        data = {'chat_id': notification_channel_id, 'text': trade_message}
+                        res = requests.get(url, data=data)
+                        if res.status_code == 200:
+                            print(json.loads(res.text))
                         return
                         break
 
