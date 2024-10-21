@@ -19,7 +19,7 @@ bot_token = ''
 notification_channel_id = ''
 
 #url 설정
-url = f''
+url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
 
 # 투자 금액 정하기
 a = '20'
@@ -199,12 +199,14 @@ async def process_message(message):
 
                     #거래가 체결되었는지 출력
                     if t==t1 and s==s1:
-                        trade_message1 = '회차:'+ iteration
-                        trade_message2 = '진입가:'+ entry
-                        trade_message3 = '목표가:'+ target
-                        trade_message4 = '손절가:'+ stop
+                        trade_message1 = '회차: ' + iteration
+                        trade_message0 = '포지션: ' + position
+                        trade_message2 = '진입가: ' + entry
+                        trade_message3 = '목표가: ' + target
+                        trade_message4 = '손절가: ' + stop
                         trade_message = f'''
 {trade_message1}
+{trade_message0}
 {trade_message2}
 {trade_message3}
 {trade_message4}
@@ -216,16 +218,19 @@ async def process_message(message):
                         return
                         break
                     else:
+                         #거래가 체결되었는지 출력
                         trade_message1 = '회차:'+ iteration
+                        trade_message0 = '포지션: ' + position
                         trade_message2 = '진입가:'+ entry
                         trade_message3 = '목표가:'+ target
                         trade_message4 = '손절가:'+ stop
                         trade_message = f'''
 {trade_message1}
+{trade_message0}
 {trade_message2}
 {trade_message3}
 {trade_message4}
-거래가 미체결되었습니다. 다시 시도하겠습니다.'''
+거래가 미체결되었습니다. 다시 시도하겠습니다. 미체결되었으므로 확인 한번 해야 합니다'''
                         data = {'chat_id': notification_channel_id, 'text': trade_message}
                         res = requests.get(url, data=data)
                         if res.status_code == 200:
@@ -285,12 +290,14 @@ async def process_message(message):
                     
                     #거래가 체결되었는지 출력
                     if t==t1 and s==s1:
-                        trade_message1 = '회차:'+ iteration
-                        trade_message2 = '진입가:'+ entry
-                        trade_message3 = '목표가:'+ target
-                        trade_message4 = '손절가:'+ stop
+                        trade_message1 = '회차: ' + iteration
+                        trade_message0 = '포지션: ' + position
+                        trade_message2 = '진입가: ' + entry
+                        trade_message3 = '목표가: ' + target
+                        trade_message4 = '손절가: ' + stop
                         trade_message = f'''
 {trade_message1}
+{trade_message0}
 {trade_message2}
 {trade_message3}
 {trade_message4}
@@ -305,15 +312,17 @@ async def process_message(message):
                     else:
                          #거래가 체결되었는지 출력
                         trade_message1 = '회차:'+ iteration
+                        trade_message0 = '포지션: ' + position
                         trade_message2 = '진입가:'+ entry
                         trade_message3 = '목표가:'+ target
                         trade_message4 = '손절가:'+ stop
                         trade_message = f'''
 {trade_message1}
+{trade_message0}
 {trade_message2}
 {trade_message3}
 {trade_message4}
-거래가 미체결되었습니다. 다시 시도하겠습니다.'''
+거래가 미체결되었습니다. 다시 시도하겠습니다. 미체결되었으므로 확인 한번 해야 합니다'''
                         data = {'chat_id': notification_channel_id, 'text': trade_message}
                         res = requests.get(url, data=data)
                         if res.status_code == 200:
@@ -325,10 +334,17 @@ async def process_message(message):
                 print("회차, 포지션, 진입가, 목표가 또는 손절가를 찾을 수 없습니다.")
         elif action == '종료':
             if iteration and position and entry:
-                # 청산 작업: 지정된 좌표로 이동하여 클릭
-                print(f"{iteration}회차 포지션 종료: {position}, 진입가: {entry}, 청산하세요.")
-                return
-                break
+                #거래가 체결되었는지 출력
+                        trade_message1 = '회차:'+ iteration
+                        trade_message0 = '포지션: ' + position
+                        trade_message2 = '진입가:'+ entry
+                        trade_message = f'''
+{trade_message1}
+{trade_message0}
+{trade_message2}
+해당 회차에서의 수익을 실현하였습니다! 축하합니다!'''
+                        return
+                        break
 
 # 클라이언트 시작 시 최신 메시지 처리
 @client.on(events.NewMessage(chats=channel_id))
