@@ -10,13 +10,13 @@ import requests
 import json
 
 # 텔레그램 API 설정
-api_id = '27114820'          # 자신의 API ID로 교체
-api_hash = '2f7a1a88abf0f9e49dd1b598ca4bc3a3'      # 자신의 API Hash로 교체
-channel_id = int('-1002146009138')  # 모니터링할 채널의 고유 ID로 교체
+api_id = ''          # 자신의 API ID로 교체
+api_hash = ''      # 자신의 API Hash로 교체
+channel_id = int('')  # 모니터링할 채널의 고유 ID로 교체
 
 #텔레그램 봇이랑 알림 채널 설정
-bot_token = '7746684594:AAFeqIKyqIVUpl1_8vYhjQCWnfAQQBmF_dk'
-notification_channel_id = '-1002361560464'
+bot_token = ''
+notification_channel_id = ''
 
 #url 설정
 url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
