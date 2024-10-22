@@ -10,13 +10,13 @@ import requests
 import json
 
 # 텔레그램 API 설정
-api_id = ''          # 자신의 API ID로 교체
-api_hash = ''      # 자신의 API Hash로 교체
-channel_id = int('')  # 모니터링할 채널의 고유 ID로 교체
+api_id = '27114820'          # 자신의 API ID로 교체
+api_hash = '2f7a1a88abf0f9e49dd1b598ca4bc3a3'      # 자신의 API Hash로 교체
+channel_id = int('-1002146009138')  # 모니터링할 채널의 고유 ID로 교체
 
 #텔레그램 봇이랑 알림 채널 설정
-bot_token = ''
-notification_channel_id = ''
+bot_token = '7746684594:AAFeqIKyqIVUpl1_8vYhjQCWnfAQQBmF_dk'
+notification_channel_id = '-1002361560464'
 
 #url 설정
 url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
@@ -94,266 +94,265 @@ async def process_message(message):
         last_api_call = current_time
 
     iteration, target, stop, entry, position, action = extract_info(message.text)
-    while True:
 
         # '송출' 단어 감지
-        if '송출' in message.text:
-            print("송출 단어 감지됨. 지정된 좌표로 이동하여 클릭합니다.")
+    if '송출' in message.text:
+        print("송출 단어 감지됨. 지정된 좌표로 이동하여 클릭합니다.")
         
-            # 마우스를 특정 좌표로 이동하고 클릭 (청산하기)
-            task_list = [
-                (pyautogui.moveTo, (1471,758, 0.2)),
-                (pyautogui.click, ()),
-                (time.sleep, (0.2,)),
-                (pyautogui.moveTo, (1069, 629, 0.2)),
-                (pyautogui.click, ())
+        # 마우스를 특정 좌표로 이동하고 클릭 (청산하기)
+        task_list = [
+            (pyautogui.moveTo, (1471,758, 0.2)),
+            (pyautogui.click, ()),
+            (time.sleep, (0.2,)),
+            (pyautogui.moveTo, (1069, 629, 0.2)),
+            (pyautogui.click, ())
             ]
-            await asyncio.get_running_loop().run_in_executor(executor, execute_pyautogui_tasks, task_list)
-            return  # '송출' 처리 후 다른 작업을 하지 않도록 종료
+        await asyncio.get_running_loop().run_in_executor(executor, execute_pyautogui_tasks, task_list)
+        return  # '송출' 처리 후 다른 작업을 하지 않도록 종료
 
-        if action == '오픈':
-            if iteration and target and stop and entry and position:
-                print(f"{iteration}회차 포지션: {position}, 진입가: {entry}, 목표가: {target}, 손절가: {stop}")
+    if action == '오픈':
+        if iteration and target and stop and entry and position:
+            print(f"{iteration}회차 포지션: {position}, 진입가: {entry}, 목표가: {target}, 손절가: {stop}")
 
-                # 공통 작업: 거래 플랫폼 창 활성화 및 초기 클릭
-                pyautogui.moveTo(1871,181,duration=0.3)
-                pyautogui.click()
-                time.sleep(0.1)
-                pyautogui.moveTo(1908, 171, duration=0.3)
+             # 공통 작업: 거래 플랫폼 창 활성화 및 초기 클릭
+            pyautogui.moveTo(1871,181,duration=0.3)
+            pyautogui.click()
+            time.sleep(0.1)
+            pyautogui.moveTo(1908, 171, duration=0.3)
+            pyautogui.click()
+            time.sleep(0.2)
+            pyautogui.moveTo(1662,165,duration=0.3)
+            pyautogui.click()
+            time.sleep(0.2)
+            
+            # 회차에 따라 다른 좌표로 이동 및 클릭
+            if iteration == '1':
+                pyautogui.moveTo(1738,430-40-10, duration=0.3)
                 pyautogui.click()
                 time.sleep(0.2)
-                pyautogui.moveTo(1662,165,duration=0.3)
+                pyautogui.typewrite(a)
+            elif iteration == '2':
+                pyautogui.moveTo(1738,430-40-10, duration=0.3)
                 pyautogui.click()
                 time.sleep(0.2)
-
-                # 회차에 따라 다른 좌표로 이동 및 클릭
-                if iteration == '1':
-                    pyautogui.moveTo(1738,430-40-10, duration=0.3)
-                    pyautogui.click()
-                    time.sleep(0.2)
-                    pyautogui.typewrite(a)
-                elif iteration == '2':
-                    pyautogui.moveTo(1738,430-40-10, duration=0.3)
-                    pyautogui.click()
-                    time.sleep(0.2)
-                    pyautogui.typewrite(str(int(a)*3))
-                elif iteration == '3':
-                    pyautogui.moveTo(1738,430-40-10, duration=0.3)
-                    pyautogui.click()
-                    time.sleep(0.2)
-                    pyautogui.typewrite(str(int(a)*6))
-                else:
-                    print(f"알 수 없는 회차: {iteration}")
-                    return  # 알 수 없는 회차일 경우 작업 중단
-
-                if position == 'Long':
-                    # 롱 포지션 작업(tp/sl, 목표가, 손절가, 롱 시작)
-                    pyautogui.moveTo(1624, 643 - 39-40-15, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.2)
-
-                    pyautogui.moveTo(1740, 705 - 39-40-10, duration=0.3-0.1)
-                    pyautogui.click()
-                    pyautogui.typewrite(target)
-                    time.sleep(0.2)
-
-                    pyautogui.moveTo(1740, 800 - 39-40-10, duration=0.3-0.1)
-                    pyautogui.click()
-                    pyautogui.typewrite(stop)
-                    time.sleep(0.2)
-
-                    pyautogui.moveTo(1682, 865 - 39-40-10, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.2)
-
-                    # 롱 포지션 마지막 추가 작업(팝업창 2번 클릭 후 초기 상태로 되돌리기)
-                    pyautogui.moveTo(1073, 358, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.2)
-                    pyautogui.moveTo(1624, 643 - 39-40-15, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.2-0.1)
-                
-                    #목표가 손절가 확인해서 비교하기
-                    t=target
-                    s=stop
-                    pyautogui.moveTo(364, 748, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.5)
-                    pyautogui.moveTo(1087, 879, duration=0.3-0.1)
-                    pyautogui.click(clicks=2)
-                    pyautogui.hotkey('ctrl','c')
-                    time.sleep(0.5)
-                    t1=str(clipboard.paste())
-                    t1=t1.replace(',','')
-                    pyautogui.moveTo(1087, 900, duration=0.2)
-                    time.sleep(0.5)
-                    pyautogui.click(clicks=2)
-                    time.sleep(0.5)
-                    pyautogui.hotkey('ctrl','c')
-                    s1=str(clipboard.paste())
-                    s1=s1.replace(',','')
-                    pyautogui.moveTo(51, 752, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.5)
-
-                    #거래가 체결되었는지 출력
-                    if t==t1 and s==s1:
-                        trade_message1 = '회차: ' + iteration
-                        trade_message0 = '포지션: ' + position
-                        trade_message2 = '진입가: ' + entry
-                        trade_message3 = '목표가: ' + target
-                        trade_message4 = '손절가: ' + stop
-                        trade_message = f'''
-{trade_message1}
-{trade_message0}
-{trade_message2}
-{trade_message3}
-{trade_message4}
-거래가 체결되었습니다'''
-                        data = {'chat_id': notification_channel_id, 'text': trade_message}
-                        res = requests.get(url, data=data)
-                        if res.status_code == 200:
-                            print(json.loads(res.text))
-                        return
-                        break
-                    else:
-                         #거래가 체결되었는지 출력
-                        trade_message1 = '회차:'+ iteration
-                        trade_message0 = '포지션: ' + position
-                        trade_message2 = '진입가:'+ entry
-                        trade_message3 = '목표가:'+ target
-                        trade_message4 = '손절가:'+ stop
-                        trade_message = f'''
-{trade_message1}
-{trade_message0}
-{trade_message2}
-{trade_message3}
-{trade_message4}
-거래가 미체결되었습니다.
-다시 시도하겠습니다.
-미체결되었으므로 확인 한번 해야 합니다'''
-                        data = {'chat_id': notification_channel_id, 'text': trade_message}
-                        res = requests.get(url, data=data)
-                        if res.status_code == 200:
-                            print(json.loads(res.text))
-                        print('거래가 미체결되었습니다. 다시 시도하겠습니다.')
-                    
-                elif position == 'Short':
-                    # 숏 포지션 작업(tp/sl, 목표가, 손절가, 숏 시작)
-                    pyautogui.moveTo(1825, 645 - 39-40-15, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.2)
-
-                    pyautogui.moveTo(1740, 705 - 39-40-10, duration=0.3-0.1)
-                    pyautogui.click()
-                    pyautogui.typewrite(target)
-                    time.sleep(0.2)
-
-                    pyautogui.moveTo(1740, 800 - 39-40-10, duration=0.3-0.1)
-                    pyautogui.click()
-                    pyautogui.typewrite(stop)
-                    time.sleep(0.2)
-
-                    pyautogui.moveTo(1807, 860 - 39-40-10, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.2)
-
-                    # 숏 포지션 마지막 추가 작업(팝업창 클릭 2번하고 초기 상태로 되돌리기)
-                    pyautogui.moveTo(1073, 358, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.2)
-                    pyautogui.moveTo(1825, 645 - 39-40-15, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.2)
-
-                    #목표가 손절가 확인해서 비교하기
-                    t=target
-                    s=stop
-                    pyautogui.moveTo(364, 748, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.5)
-                    pyautogui.moveTo(1087, 879, duration=0.3-0.1)
-                    pyautogui.click(clicks=2)
-                    pyautogui.hotkey('ctrl','c')
-                    time.sleep(0.5)
-                    t1=str(clipboard.paste())
-                    t1=t1.replace(',','')
-                    pyautogui.moveTo(1087, 900, duration=0.2)
-                    time.sleep(0.5)
-                    pyautogui.click(clicks=2)
-                    time.sleep(0.5)
-                    pyautogui.hotkey('ctrl','c')
-                    s1=str(clipboard.paste())
-                    s1=s1.replace(',','')
-                    pyautogui.moveTo(51, 752, duration=0.3-0.1)
-                    pyautogui.click()
-                    time.sleep(0.5)
-                    
-                    #거래가 체결되었는지 출력
-                    if t==t1 and s==s1:
-                        trade_message1 = '회차: ' + iteration
-                        trade_message0 = '포지션: ' + position
-                        trade_message2 = '진입가: ' + entry
-                        trade_message3 = '목표가: ' + target
-                        trade_message4 = '손절가: ' + stop
-                        trade_message = f'''
-{trade_message1}
-{trade_message0}
-{trade_message2}
-{trade_message3}
-{trade_message4}
-거래가 체결되었습니다'''
-                        data = {'chat_id': notification_channel_id, 'text': trade_message}
-                        res = requests.get(url, data=data)
-                        if res.status_code == 200:
-                            print(json.loads(res.text))
-                        print('거래가 체결되었습니다')
-                        return
-                        break
-                    else:
-                         #거래가 체결되었는지 출력
-                        trade_message1 = '회차:'+ iteration
-                        trade_message0 = '포지션: ' + position
-                        trade_message2 = '진입가:'+ entry
-                        trade_message3 = '목표가:'+ target
-                        trade_message4 = '손절가:'+ stop
-                        trade_message = f'''
-{trade_message1}
-{trade_message0}
-{trade_message2}
-{trade_message3}
-{trade_message4}
-거래가 미체결되었습니다.
-다시 시도하겠습니다.
-미체결되었으므로 확인 한번 해야 합니다'''
-                        data = {'chat_id': notification_channel_id, 'text': trade_message}
-                        res = requests.get(url, data=data)
-                        if res.status_code == 200:
-                            print(json.loads(res.text))
-                        print('거래가 미체결되었습니다. 다시 시도하겠습니다.')
-                else:
-                    print("알 수 없는 포지션입니다.")
+                pyautogui.typewrite(str(int(a)*3))
+            elif iteration == '3':
+                pyautogui.moveTo(1738,430-40-10, duration=0.3)
+                pyautogui.click()
+                time.sleep(0.2)
+                pyautogui.typewrite(str(int(a)*6))
             else:
-                print("회차, 포지션, 진입가, 목표가 또는 손절가를 찾을 수 없습니다.")
-        elif action == '종료':
+                print(f"알 수 없는 회차: {iteration}")
+                return  # 알 수 없는 회차일 경우 작업 중단
+
+            if position == 'Long':
+                # 롱 포지션 작업(tp/sl, 목표가, 손절가, 롱 시작)
+                pyautogui.moveTo(1624, 643 - 39-40-15, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.2)
+
+                pyautogui.moveTo(1740, 705 - 39-40-10, duration=0.3-0.1)
+                pyautogui.click()
+                pyautogui.typewrite(target)
+                time.sleep(0.2)
+
+                pyautogui.moveTo(1740, 800 - 39-40-10, duration=0.3-0.1)
+                pyautogui.click()
+                pyautogui.typewrite(stop)
+                time.sleep(0.2)
+
+                pyautogui.moveTo(1682, 865 - 39-40-10, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.2)
+
+                # 롱 포지션 마지막 추가 작업(팝업창 2번 클릭 후 초기 상태로 되돌리기)
+                pyautogui.moveTo(1073, 358, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.2)
+                pyautogui.moveTo(1624, 643 - 39-40-15, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.2-0.1)
+                
+                #목표가 손절가 확인해서 비교하기
+                t=target
+                s=stop
+                pyautogui.moveTo(364, 748, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.5)
+                pyautogui.moveTo(1087, 879, duration=0.3-0.1)
+                pyautogui.click(clicks=2)
+                pyautogui.hotkey('ctrl','c')
+                time.sleep(0.5)
+                t1=str(clipboard.paste())
+                t1=t1.replace(',','')
+                pyautogui.moveTo(1087, 900, duration=0.2)
+                time.sleep(0.5)
+                pyautogui.click(clicks=2)
+                time.sleep(0.5)
+                pyautogui.hotkey('ctrl','c')
+                s1=str(clipboard.paste())
+                s1=s1.replace(',','')
+                pyautogui.moveTo(51, 752, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.5)
+
+                #거래가 체결되었는지 출력
+                if t==t1 and s==s1:
+                    trade_message1 = '회차: ' + iteration
+                    trade_message0 = '포지션: ' + position
+                    trade_message2 = '진입가: ' + entry
+                    trade_message3 = '목표가: ' + target
+                    trade_message4 = '손절가: ' + stop
+                    trade_message = f'''
+{trade_message1}
+{trade_message0}
+{trade_message2}
+{trade_message3}
+{trade_message4}
+거래가 체결되었습니다'''
+                    data = {'chat_id': notification_channel_id, 'text': trade_message}
+                    res = requests.get(url, data=data)
+                    if res.status_code == 200:
+                        print(json.loads(res.text))
+                    return
+                else:
+                    #거래가 체결되었는지 출력
+                    trade_message1 = '회차:'+ iteration
+                    trade_message0 = '포지션: ' + position
+                    trade_message2 = '진입가:'+ entry
+                    trade_message3 = '목표가:'+ target
+                    trade_message4 = '손절가:'+ stop
+                    trade_message = f'''
+{trade_message1}
+{trade_message0}
+{trade_message2}
+{trade_message3}
+{trade_message4}
+거래가 미체결되었습니다.
+거래한 목표가: {t1}
+해야 되는 목표가: {t}
+거래한 손절가: {s1}
+해야 되는 손절가: {s}
+미체결되었으므로 확인 한번 해야 합니다'''
+                    data = {'chat_id': notification_channel_id, 'text': trade_message}
+                    res = requests.get(url, data=data)
+                    if res.status_code == 200:
+                        print(json.loads(res.text))
+                    print('거래가 미체결되었습니다. 다시 시도하겠습니다.')
+                return
+
+            elif position == 'Short':
+                # 숏 포지션 작업(tp/sl, 목표가, 손절가, 숏 시작)
+                pyautogui.moveTo(1825, 645 - 39-40-15, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.2)
+
+                pyautogui.moveTo(1740, 705 - 39-40-10, duration=0.3-0.1)
+                pyautogui.click()
+                pyautogui.typewrite(target)
+                time.sleep(0.2)
+
+                pyautogui.moveTo(1740, 800 - 39-40-10, duration=0.3-0.1)
+                pyautogui.click()
+                pyautogui.typewrite(stop)
+                time.sleep(0.2)
+
+                pyautogui.moveTo(1807, 860 - 39-40-10, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.2)
+
+                # 숏 포지션 마지막 추가 작업(팝업창 클릭 2번하고 초기 상태로 되돌리기)
+                pyautogui.moveTo(1073, 358, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.2)
+                pyautogui.moveTo(1825, 645 - 39-40-15, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.2)
+
+                #목표가 손절가 확인해서 비교하기
+                t=target
+                s=stop
+                pyautogui.moveTo(364, 748, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.5)
+                pyautogui.moveTo(1087, 879, duration=0.3-0.1)
+                pyautogui.click(clicks=2)
+                time.sleep(0.5)
+                pyautogui.hotkey('ctrl','c')
+                s1=str(clipboard.paste())
+                s1=s1.replace(',','')
+                pyautogui.moveTo(51, 752, duration=0.3-0.1)
+                pyautogui.click()
+                time.sleep(0.5)
+                    
+                #거래가 체결되었는지 출력
+                if t==t1 and s==s1:
+                    trade_message1 = '회차: ' + iteration
+                    trade_message0 = '포지션: ' + position
+                    trade_message2 = '진입가: ' + entry
+                    trade_message3 = '목표가: ' + target
+                    trade_message4 = '손절가: ' + stop
+                    trade_message = f'''
+{trade_message1}
+{trade_message0}
+{trade_message2}
+{trade_message3}
+{trade_message4}
+거래가 체결되었습니다'''
+                    data = {'chat_id': notification_channel_id, 'text': trade_message}
+                    res = requests.get(url, data=data)
+                    if res.status_code == 200:
+                        print(json.loads(res.text))
+                    print('거래가 체결되었습니다')
+                    return
+                
+                else:
+                    #거래가 체결되었는지 출력
+                    trade_message1 = '회차:'+ iteration
+                    trade_message0 = '포지션: ' + position
+                    trade_message2 = '진입가:'+ entry
+                    trade_message3 = '목표가:'+ target
+                    trade_message4 = '손절가:'+ stop
+                    trade_message = f'''
+{trade_message1}
+{trade_message0}
+{trade_message2}
+{trade_message3}
+{trade_message4}
+거래가 미체결되었습니다.
+거래한 목표가: {t1}
+해야 되는 목표가: {t}
+거래한 손절가: {s1}
+해야 되는 손절가: {s}
+미체결되었으므로 확인 한번 해야 합니다'''
+                    data = {'chat_id': notification_channel_id, 'text': trade_message}
+                    res = requests.get(url, data=data)
+                    if res.status_code == 200:
+                        print(json.loads(res.text))
+                    print('거래가 미체결되었습니다. 다시 시도하겠습니다.')
+                    return
+            else:
+                print("알 수 없는 포지션입니다.")
+                return
+        else:
+            print("회차, 포지션, 진입가, 목표가 또는 손절가를 찾을 수 없습니다.")
+    elif action == '종료':
             if iteration and position and entry:
                 #거래가 체결되었는지 출력
-                        trade_message1 = '회차:'+ iteration
-                        trade_message0 = '포지션: ' + position
-                        trade_message2 = '진입가:'+ entry
-                        trade_message = f'''
+                trade_message1 = '회차:'+ iteration
+                trade_message0 = '포지션: ' + position
+                trade_message2 = '진입가:'+ entry
+                trade_message = f'''
 {trade_message1}
 {trade_message0}
 {trade_message2}
 해당 회차에서의 수익을 실현하였습니다!
 축하합니다!'''
-                        data = {'chat_id': notification_channel_id, 'text': trade_message}
-                        res = requests.get(url, data=data)
-                        if res.status_code == 200:
-                            print(json.loads(res.text))
-                        return
-                        break
+                data = {'chat_id': notification_channel_id, 'text': trade_message}
+                res = requests.get(url, data=data)
+                if res.status_code == 200:
+                    print(json.loads(res.text))
+                    return
 
 # 클라이언트 시작 시 최신 메시지 처리
 @client.on(events.NewMessage(chats=channel_id))
