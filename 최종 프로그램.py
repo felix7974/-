@@ -10,13 +10,13 @@ import requests
 import json
 
 # 텔레그램 API 설정
-api_id = ''          # 자신의 API ID로 교체
-api_hash = ''      # 자신의 API Hash로 교체
-channel_id = int('')  # 모니터링할 채널의 고유 ID로 교체
+api_id = '27114820'          # 자신의 API ID로 교체
+api_hash = '2f7a1a88abf0f9e49dd1b598ca4bc3a3'      # 자신의 API Hash로 교체
+channel_id = int('-1002146009138')  # 모니터링할 채널의 고유 ID로 교체
 
 #텔레그램 봇이랑 알림 채널 설정
-bot_token = ''
-notification_channel_id = ''
+bot_token = '7746684594:AAFeqIKyqIVUpl1_8vYhjQCWnfAQQBmF_dk'
+notification_channel_id = '-1002361560464'
 
 #url 설정
 url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
@@ -127,17 +127,17 @@ async def process_message(message):
             
             # 회차에 따라 다른 좌표로 이동 및 클릭
             if iteration == '1':
-                pyautogui.moveTo(1738,430-40-10, duration=0.3)
+                pyautogui.moveTo(1738,369, duration=0.3)
                 pyautogui.click()
                 time.sleep(0.2)
                 pyautogui.typewrite(a)
             elif iteration == '2':
-                pyautogui.moveTo(1738,430-40-10, duration=0.3)
+                pyautogui.moveTo(1738,369, duration=0.3)
                 pyautogui.click()
                 time.sleep(0.2)
                 pyautogui.typewrite(str(int(a)*3))
             elif iteration == '3':
-                pyautogui.moveTo(1738,430-40-10, duration=0.3)
+                pyautogui.moveTo(1738,369, duration=0.3)
                 pyautogui.click()
                 time.sleep(0.2)
                 pyautogui.typewrite(str(int(a)*6))
@@ -147,21 +147,21 @@ async def process_message(message):
 
             if position == 'Long':
                 # 롱 포지션 작업(tp/sl, 목표가, 손절가, 롱 시작)
-                pyautogui.moveTo(1624, 643 - 39-40-15, duration=0.3-0.1)
+                pyautogui.moveTo(1624, 539, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.2)
 
-                pyautogui.moveTo(1740, 705 - 39-40-10, duration=0.3-0.1)
+                pyautogui.moveTo(1740, 595, duration=0.3-0.1)
                 pyautogui.click()
                 pyautogui.typewrite(target)
                 time.sleep(0.2)
 
-                pyautogui.moveTo(1740, 800 - 39-40-10, duration=0.3-0.1)
+                pyautogui.moveTo(1740, 692, duration=0.3-0.1)
                 pyautogui.click()
                 pyautogui.typewrite(stop)
                 time.sleep(0.2)
 
-                pyautogui.moveTo(1682, 865 - 39-40-10, duration=0.3-0.1)
+                pyautogui.moveTo(1682, 761, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.2)
 
@@ -169,7 +169,7 @@ async def process_message(message):
                 pyautogui.moveTo(1073, 358, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.2)
-                pyautogui.moveTo(1624, 643 - 39-40-15, duration=0.3-0.1)
+                pyautogui.moveTo(1624, 539, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.2-0.1)
                 
@@ -179,17 +179,19 @@ async def process_message(message):
                 pyautogui.moveTo(364, 748, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.5)
-                pyautogui.moveTo(1087, 879, duration=0.3-0.1)
+                pyautogui.moveTo(1087, 871, duration=0.3-0.1)
                 pyautogui.click(clicks=2)
+                time.sleep(0.5)
                 pyautogui.hotkey('ctrl','c')
                 time.sleep(0.5)
                 t1=str(clipboard.paste())
                 t1=t1.replace(',','')
-                pyautogui.moveTo(1087, 900, duration=0.2)
+                pyautogui.moveTo(1087, 896, duration=0.2)
                 time.sleep(0.5)
                 pyautogui.click(clicks=2)
                 time.sleep(0.5)
                 pyautogui.hotkey('ctrl','c')
+                time.sleep(0.5)
                 s1=str(clipboard.paste())
                 s1=s1.replace(',','')
                 pyautogui.moveTo(51, 752, duration=0.3-0.1)
@@ -197,7 +199,16 @@ async def process_message(message):
                 time.sleep(0.5)
 
                 #거래가 체결되었는지 출력
-                if t==t1 and s==s1:
+                if t1 == None or s1 == None:
+                    trade_message = f'''
+거래 내역을 확인하는데 오류가 발생하였습니다.
+수동으로 확인해야 합니다.'''
+                    data = {'chat_id': notification_channel_id, 'text': trade_message}
+                    res = requests.get(url, data=data)
+                    if res.status_code == 200:
+                        print(json.loads(res.text))
+                    return
+                elif t==t1 and s==s1:
                     trade_message1 = '회차: ' + iteration
                     trade_message0 = '포지션: ' + position
                     trade_message2 = '진입가: ' + entry
@@ -243,21 +254,21 @@ async def process_message(message):
 
             elif position == 'Short':
                 # 숏 포지션 작업(tp/sl, 목표가, 손절가, 숏 시작)
-                pyautogui.moveTo(1825, 645 - 39-40-15, duration=0.3-0.1)
+                pyautogui.moveTo(1825, 539, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.2)
 
-                pyautogui.moveTo(1740, 705 - 39-40-10, duration=0.3-0.1)
+                pyautogui.moveTo(1740, 595, duration=0.3-0.1)
                 pyautogui.click()
                 pyautogui.typewrite(target)
                 time.sleep(0.2)
 
-                pyautogui.moveTo(1740, 800 - 39-40-10, duration=0.3-0.1)
+                pyautogui.moveTo(1740, 692, duration=0.3-0.1)
                 pyautogui.click()
                 pyautogui.typewrite(stop)
                 time.sleep(0.2)
 
-                pyautogui.moveTo(1807, 860 - 39-40-10, duration=0.3-0.1)
+                pyautogui.moveTo(1807, 761, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.2)
 
@@ -265,7 +276,7 @@ async def process_message(message):
                 pyautogui.moveTo(1073, 358, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.2)
-                pyautogui.moveTo(1825, 645 - 39-40-15, duration=0.3-0.1)
+                pyautogui.moveTo(1825, 539, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.2)
 
@@ -275,18 +286,37 @@ async def process_message(message):
                 pyautogui.moveTo(364, 748, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.5)
-                pyautogui.moveTo(1087, 879, duration=0.3-0.1)
+                pyautogui.moveTo(1087, 871, duration=0.3-0.1)
                 pyautogui.click(clicks=2)
                 time.sleep(0.5)
                 pyautogui.hotkey('ctrl','c')
+                time.sleep(0.5)
+                t1=str(clipboard.paste())
+                t1=t1.replace(',','')
+                pyautogui.moveTo(1087, 896, duration=0.2)
+                time.sleep(0.5)
+                pyautogui.click(clicks=2)
+                time.sleep(0.5)
+                pyautogui.hotkey('ctrl','c')
+                time.sleep(0.5)
                 s1=str(clipboard.paste())
                 s1=s1.replace(',','')
                 pyautogui.moveTo(51, 752, duration=0.3-0.1)
                 pyautogui.click()
                 time.sleep(0.5)
-                    
+
                 #거래가 체결되었는지 출력
-                if t==t1 and s==s1:
+                if t1 == None or s1 == None:
+                    trade_message = f'''
+거래 내역을 확인하는데 오류가 발생하였습니다.
+수동으로 확인해야 합니다.'''
+                    data = {'chat_id': notification_channel_id, 'text': trade_message}
+                    res = requests.get(url, data=data)
+                    if res.status_code == 200:
+                        print(json.loads(res.text))
+                    return
+                    
+                elif t==t1 and s==s1:
                     trade_message1 = '회차: ' + iteration
                     trade_message0 = '포지션: ' + position
                     trade_message2 = '진입가: ' + entry
